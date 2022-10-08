@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "993737959089",
+    "project_id": "copa2022-480e0",
+    "storage_bucket": "copa2022-480e0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993737959089:android:4e60309a1f82797b7c2490",
+        "android_client_info": {
+          "package_name": "br.com.sharlon.copa_do_mundo_2022"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "993737959089-jqs2sn39h97lf9fgminisos50rs0la6t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAP3aA88NtVyko7aSzTqcfqQ3_x1O2_3tA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "993737959089-jqs2sn39h97lf9fgminisos50rs0la6t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "993737959089-pc0lp2ief5kpn93ids7jumb6bm4j1elp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.sharlon.copaDoMundo2022"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
