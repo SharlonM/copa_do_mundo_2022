@@ -8,19 +8,24 @@ class BancoDeDados {
   static List<JogoRealModel> jogosReais = <JogoRealModel>[];
 
   static List<JogoRealModel>? jogoRealFromFirestore(
-    DocumentSnapshot<Map<String, dynamic>> snapshot
-  ) {
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    jogosReais.clear();
     final data = snapshot.data();
     data?.forEach((key, value) {
       jogosReais.add(JogoRealModel(
-          value?['Data'],
-          value?['GolsFora'],
-          value?['Casa'],
-          value?['Ganhador'],
-          value?['Fora'],
-          value?['GolsCasa']));
+          value['Data'],
+          value['GolsFora'],
+          value['Casa'].toString().trim(),
+          value['Ganhador'].toString().trim(),
+          value['Fora'].toString().trim(),
+          value['GolsCasa']));
     });
 
+    jogosReais.sort((x, y) {
+      Timestamp a = x.data!;
+      Timestamp b = y.data!;
+      return a.compareTo(b);
+    });
     return jogosReais;
   }
 

@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^1.24.0
   cloud_firestore: ^3.5.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
@@ -60,9 +61,40 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+     - lib/images/Alemanha.png
+     - lib/images/Argentina.png
+     - lib/images/Arábia Saudita.png
+     - lib/images/Austrália.png
+     - lib/images/Brasil.png
+     - lib/images/Bélgica.png
+     - lib/images/Camarões.png
+     - lib/images/Canadá.png
+     - lib/images/Catar.png
+     - lib/images/Coreia do Sul.png
+     - lib/images/Costa Rica.png
+     - lib/images/Croácia.png
+     - lib/images/Dinamarca.png
+     - lib/images/Equador.png
+     - lib/images/Espanha.png
+     - lib/images/Estados Unidos.png
+     - lib/images/França.png
+     - lib/images/Gana.png
+     - lib/images/Holanda.png
+     - lib/images/Inglaterra.png
+     - lib/images/Irã.png
+     - lib/images/Japão.png
+     - lib/images/Marrocos.png
+     - lib/images/México.png
+     - lib/images/País de Gales.png
+     - lib/images/Polônia.png
+     - lib/images/Portugal.png
+     - lib/images/Senegal.png
+     - lib/images/Servia.png
+     - lib/images/Suiça.png
+     - lib/images/Tunísia.png
+     - lib/images/Uruguai.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
