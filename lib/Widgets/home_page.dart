@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:copa_do_mundo_2022/modelos/model_jogo_real.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../api/banco_de_dados.dart';
 import 'package:intl/intl.dart';
 
@@ -14,45 +13,36 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static DateTime ultimaAtt = DateTime.now().subtract(const Duration(hours: 1));
-  String rodadaSelecionada = "1";
+  int rodadaSelecionada = 0;
+  static List<String> rodadas = [
+    "1 Rodada",
+    "2 Rodada",
+    "3 Rodada",
+    "Oitavas",
+    "Quartas",
+    "Semi",
+    "Terceiro Lugar",
+    "Final"
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    ultimaAtt = DateTime.now().subtract(const Duration(hours: 24));
+    debugPrint("Init");
+  }
 
   @override
   Widget build(BuildContext context) {
     debugPrint(ultimaAtt.toString());
-    debugPrint(rodadaSelecionada);
+    debugPrint(rodadaSelecionada.toString());
     return SingleChildScrollView(
       padding: const EdgeInsets.only(top: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            height: 50,
-            color: Colors.grey,
-            child: Center(
-              child: ListView(
-                padding: const EdgeInsets.all(5),
-                scrollDirection: Axis.horizontal,
-                children: [
-                  botaoRodada("1 Rodada"),
-                  const SizedBox(width: 30),
-                  botaoRodada("2 Rodada"),
-                  const SizedBox(width: 30),
-                  botaoRodada("3 Rodada"),
-                  const SizedBox(width: 30),
-                  botaoRodada("Oitavas"),
-                  const SizedBox(width: 30),
-                  botaoRodada("Quartas"),
-                  const SizedBox(width: 30),
-                  botaoRodada("Semi"),
-                  const SizedBox(width: 30),
-                  botaoRodada("3 Lugar"),
-                  const SizedBox(width: 30),
-                  botaoRodada("Final"),
-                ],
-              ),
-            ),
-          ),
           const SizedBox(height: 2),
+          widgetRodada(rodadas.elementAt(rodadaSelecionada)),
           buscarDadosBanco(),
         ],
       ),
@@ -61,8 +51,11 @@ class _HomePageState extends State<HomePage> {
 
   Widget buscarDadosBanco() {
     if (DateTime.now().isAfter(ultimaAtt.add(const Duration(minutes: 1)))) {
+      String get =
+      rodadas.elementAt(rodadaSelecionada).replaceAll("Rodada", "").trim();
+      debugPrint(get);
       return FutureBuilder<DocumentSnapshot>(
-          future: BancoDeDados.refJogosReais.doc(rodadaSelecionada).get(),
+          future: BancoDeDados.refJogosReais.doc(get).get(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.hasError) {
               return const Text("Something went wrong");
@@ -80,7 +73,9 @@ class _HomePageState extends State<HomePage> {
               return criarCards();
             }
 
-            return const Text("loading");
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           });
     } else {
       return criarCards(); // cria usando os dados existente atualmente
@@ -101,23 +96,35 @@ class _HomePageState extends State<HomePage> {
 
           return Column(
             children: [
+              Row(children: <Widget>[
+                const Expanded(
+                    child: Divider(
+                      color: Color.fromRGBO(158, 158, 158, 100),
+                    )),
+                Text(
+                  dataBR,
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal,
+                      fontStyle: FontStyle.italic),
+                ),
+                const Expanded(
+                    child: Divider(
+                      color: Color.fromRGBO(158, 158, 158, 100),
+                    )),
+              ]),
               Card(
                 margin: const EdgeInsets.all(10),
                 elevation: 20,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
-                color: Colors.grey,
+                color: const Color.fromRGBO(238, 238, 238, 100),
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Center(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          dataBR,
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
                         const SizedBox(height: 5),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -154,18 +161,21 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 20,),
+                            const SizedBox(
+                              width: 20,
+                            ),
                             const Text("X"),
-                            const SizedBox(width: 20,),
+                            const SizedBox(
+                              width: 20,
+                            ),
                             const SizedBox(
                               height: 35,
                               width: 45,
                               child: TextField(
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  fillColor: Colors.white
-                                ),
+                                    border: OutlineInputBorder(),
+                                    fillColor: Colors.white),
                               ),
                             ),
                             Expanded(
@@ -187,12 +197,26 @@ class _HomePageState extends State<HomePage> {
                                     )
                                   ],
                                 )),
-                            ElevatedButton(
-                              onPressed: () {},
-                              child: Text('Confirmar'),
-                            )
+                            botaoConfirmacao(jogo)
                           ],
-                        )
+                        ),
+                        Row(children: const <Widget>[
+                          Expanded(
+                              child: Divider(
+                                color: Color.fromRGBO(158, 158, 158, 100),
+                              )),
+                          Text(
+                            "3 Pontos",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                                fontStyle: FontStyle.italic),
+                          ),
+                          Expanded(
+                              child: Divider(
+                                color: Color.fromRGBO(158, 158, 158, 100),
+                              )),
+                        ])
                       ],
                     ),
                   ),
@@ -204,42 +228,78 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  Widget botaoRodada(String text) {
-    return ElevatedButton(
-      style: TextButton.styleFrom(
-          backgroundColor:
-              text.replaceAll("Rodada", "").trim() == rodadaSelecionada
-                  ? Colors.white
-                  : Colors.yellow,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
-      onPressed: () {
-        mudarRodada(text);
-      },
-      child: Text(
-        text,
-        overflow: TextOverflow.clip,
-        style: const TextStyle(color: Colors.black),
-      ),
-    );
-  }
-
-  void mudarRodada(String text) {
+  void mudarRodada(int x) {
     setState(() {
-      switch (text) {
-        case "1 Rodada":
-          rodadaSelecionada = "1";
-          break;
-        case "2 Rodada":
-          rodadaSelecionada = "2";
-          break;
-        case "3 Rodada":
-          rodadaSelecionada = "3";
-          break;
-        default:
-          rodadaSelecionada = text;
+      if (x == 2) {
+        rodadaSelecionada++;
+      } else {
+        rodadaSelecionada--;
       }
       ultimaAtt = DateTime.now().subtract(const Duration(hours: 24));
     });
   }
+
+  widgetRodada(String text) {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(
+              width: 1, style: BorderStyle.solid, color: Colors.grey)),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          condicaoDeBotao(text, 1, Icons.arrow_left),
+          Center(
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 25,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          condicaoDeBotao(text, 2, Icons.arrow_right)
+        ],
+      ),
+    );
+  }
+
+  condicaoDeBotao(String text, int x, icone) {
+    if (text == "Final" && x == 2) {
+      return const SizedBox(width: 50);
+    } else if (text == "1 Rodada" && x == 1) {
+      return const SizedBox(width: 50);
+    } else {
+      return GestureDetector(
+        onTap: () {
+          mudarRodada(x);
+        },
+        child: Icon(
+          icone,
+          size: 55,
+        ),
+      );
+    }
+  }
+
+  botaoConfirmacao(JogoRealModel jogo) {
+    bool confirmado = false; // receber o objeto de jogo com a variavel jogo.confirmado
+    Timestamp data = jogo.data as Timestamp;
+    bool podeConfirmar = data.compareTo(Timestamp.now()) >= 0;
+
+    if (!confirmado) {
+      return IconButton(
+        onPressed: podeConfirmar ? (){debugPrint("Pressed confirmar");} : null,
+        icon: const Icon(Icons.check_box_outline_blank),
+        tooltip: "Confirmar",
+      );
+    } else {
+      return IconButton(
+        onPressed: () {},
+        icon: const Icon(Icons.check_box, color: Colors.green,),
+        tooltip: "Cancelar",
+      );
+    }
+  }
+
 }
